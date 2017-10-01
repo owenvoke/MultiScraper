@@ -1,0 +1,18 @@
+{
+    "name": "undeadyetii/libraries",
+    "description": "A bunch of libraries",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "UnDeAdYeTii",
+            "homepage": "https://github.com/UnDeAdYeTii/",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "YeTii\\": "src/Yetii/"
+        }
+    }
+}
