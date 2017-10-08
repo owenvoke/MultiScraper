@@ -7,9 +7,10 @@ set_time_limit(0);
 require_once __DIR__.'/vendor/autoload.php';
 
 $scraper = new YeTii\MultiScraper\MultiScraper();
+$torrents = $scraper->latest();
 
-$scraper->latest();
+// $b = torrent_info('https://www.hypercache.pw/metadata/MlRQeU1MR2tteGV0UitxTnF0WUxFdz09/?inuid=0');
+// print '<pre>';
+// print_r($b);
+printDie($torrents);
 printDie('End of file');
-// $str = json_encode($t);
-// header("Content-Type: application/json");
-// print $str;

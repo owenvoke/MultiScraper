@@ -4,6 +4,7 @@ namespace YeTii\MultiScraper\Attributes;
 class Category {
 
 	protected $value;
+	public $site_specific;
 
 	function __construct($value = null) {
 		if (!is_null($value))
@@ -11,6 +12,12 @@ class Category {
 	}
 
 	public function get($default = null) {
+		if ($this->site_specific) {
+			return (object)[
+				'category'=>$this->value,
+				'site'=>$this->site_specific
+			];
+		}
 		return is_numeric($this->value) ? $this->value : $default;
 	}
 

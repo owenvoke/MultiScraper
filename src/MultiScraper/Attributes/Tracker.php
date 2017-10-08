@@ -15,7 +15,7 @@ class Tracker {
 	}
 
 	public function set(string $value) {
-		if (preg_match('/((?:http|udp|tcp):\/\/(?:[a-z0-9\-]+\.)+(?:[a-z0-9]+):[\d]+(?:\/[^\s]+){0,1})/i', $value))
+		if (preg_match('/((?:http|https|udp|tcp):\/\/(?:[a-z0-9\-]+\.)+(?:[a-z0-9]+)(?::[\d]+){0,1}(?:\/[^\s]+){0,1})/i', $value))
 			$this->value = $value;
 		else
 			throw new \Exception("Invalid Tracker: (`{$value}`)", 1);

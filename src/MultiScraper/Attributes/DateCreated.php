@@ -18,11 +18,11 @@ class DateCreated {
 		if (preg_match('/^\d+$/', trim($value))){
 			$this->value = (int)$value;
 		} else {
-			$value = strtotime($value);
-			if ($value)
-				$this->value = $value;
+			$value2 = strtotime($value);
+			if ($value2)
+				$this->value = $value2;
 			else
-				throw new \Exception("Invalid DateCreated", 1);
+				throw new \Exception("Invalid DateCreated (`{$value}`)", 1);
 		}
 		
 		return $this;

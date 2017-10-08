@@ -4,16 +4,20 @@ namespace YeTii\MultiScraper;
 use \JJG\Request;
 use \YeTii\General\Str;
 
-class MultiScraper extends Scraper {
+class MultiScraper {
 
 	private $debug = true;
 
-	private $user = null;
-	private $query = null;
-	private $page = 1;
+	protected $sites = [];
+
+	protected $user = null;
+	protected $query = null;
+	protected $page = 1;
+
+	protected $torrents = [];
 
 	function __construct(array $args = null) {
-		$this->init($args);
+		
 	}
 
 	function __get(string $name) {
@@ -24,36 +28,50 @@ class MultiScraper extends Scraper {
 		$this->{$name} = $value;
 	}
 
-	private function init($args) {
-		if (is_array($args)) {
-			foreach ($args as $key => $value) {
-				// add 
-			}
-		}
+	public function initalize() {
+		$this->sites = require __DIR__.'/scrapers.php';
 	}
 
 	public function latest($page = 1) {
+		if (!$this->initalized)
+			$this->initalize();
+		$this->page = $page;
+		return $this->scrape();
+	}
+
+	public function search($query, $page = 1) {
+		if (!$this->initalized)
+			$this->initalize();
+		$this->query = $query;
+		$this->page = $page;
+		return $this->scrape();
+	}
+
+	public function user($user, $page = 1) {
+		if (!$this->initalized)
+			$this->initalize();
+		$this->user = $user;
 		$this->page = $page;
 		return $this->scrape();
 	}
 
 	public function scrape() {
-		$torrents = [];
-		$sites = getScrapers();
-		foreach ($sites as $class) {
-			print "Class: $class<br>";
-			$scraper = new $class($this); 
-			$torrent = null;
+		$all = [];
+		if (!$this->sites) return false;
+		foreach ($this->sites as $site) {
+			$torrents = null;
 			if ($this->user) {
-				$scraper->user($this->user, $this->page);
+				$torrents = $site->scrapeUser($this->user, $this->page);
 			}elseif ($this->query) {
-				$scraper->search($this->query, $this->page);
-			}else{
-				$scraper->latest($this->page);
+				$torrents = $site->scrapeSearch($this->query, $this->page);
+			}else {
+				$torrents = $site->scrapeLatest($this->page);
+			}
+			if ($torrents) {
+				$all = array_merge($all, $torrents);
 			}
 		}
-		print 'Scrape end';
-		return true;
+		return $all;
 	}
 
 

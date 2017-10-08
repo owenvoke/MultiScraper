@@ -15,7 +15,7 @@ class MagnetLink {
 	}
 
 	public function set($value) {
-		if (preg_match('/^magnet:\?xt=urn:btih:([a-f0-9]{40}).+/', trim($value))){
+		if (preg_match('/^magnet:\?xt=urn:btih:([a-f0-9]{40}).+/i', trim($value))){
 			$this->value = $value;
 		}else{
 			throw new \Exception("Invalid MagnetLink (`{$value}`)", 1);

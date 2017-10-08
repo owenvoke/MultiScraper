@@ -4,6 +4,7 @@ namespace YeTii\MultiScraper\Attributes;
 class User {
 
 	protected $value;
+	public $site_specific;
 
 	function __construct($value = null, $instance = null) {
 		if (!is_null($value))
@@ -11,7 +12,13 @@ class User {
 	}
 
 	public function get($default = null) {
-		return is_numeric($this->value) ? $this->value : $default;
+		if ($this->site_specific) {
+			return (object)[
+				'username'=>$this->value,
+				'site'=>$this->site_specific
+			];
+		}
+		return !is_null($this->value) ? $this->value : $default;
 	}
 
 	public function set($value) {
