@@ -45,6 +45,7 @@ class Trackers
     {
         $this->value = [];
 
+        /** @var Tracker $tracker */
         foreach ($value as $tracker) {
             $this->add($tracker);
         }
@@ -55,7 +56,7 @@ class Trackers
     /**
      * Add a tracker to the attribute
      *
-     * @param array|mixed $value
+     * @param array|Tracker $value
      * @return $this
      */
     public function add($value)
