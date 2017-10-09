@@ -5,26 +5,23 @@ namespace YeTii\MultiScraper;
 class MultiScraper
 {
     private $debug = true;
-
     protected $sites = [];
-
     protected $user = null;
     protected $query = null;
     protected $page = 1;
-
     protected $torrents = [];
 
-    function __construct(array $args = null)
+    public function __construct(array $args = null)
     {
 
     }
 
-    function __get(string $name)
+    public function __get(string $name)
     {
         return isset($this->{$name}) ? $this->{$name} : null;
     }
 
-    function __set(string $name, $value)
+    public function __set(string $name, $value)
     {
         $this->{$name} = $value;
     }

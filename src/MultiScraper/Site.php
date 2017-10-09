@@ -32,9 +32,7 @@ class Site
         'id'
     ];
     protected $methods = [];
-
     protected $name = '';
-
     protected $debug = true;
 
 
@@ -42,7 +40,7 @@ class Site
      + ==========            Init              ===========
      + =================================================== */
 
-    function __construct($args = null)
+    public function __construct($args = null)
     {
         if (is_string($args)) {
             $this->name = $args;
@@ -55,7 +53,7 @@ class Site
         }
     }
 
-    function __get($name)
+    public function __get($name)
     {
         if (isset($this->{$name})) {
             return $this->{$name};
@@ -64,7 +62,7 @@ class Site
         }
     }
 
-    function __set($name, $value)
+    public function __set($name, $value)
     {
         $this->{$name} = $value;
     }
