@@ -1,23 +1,27 @@
 <?php
+
 namespace YeTii\MultiScraper\Attributes;
 
-class FileCount {
+class FileCount
+{
+    protected $value;
 
-	protected $value;
+    public function __construct($value = null)
+    {
+        if (!is_null($value)) {
+            $this->set($value);
+        }
+    }
 
-	function __construct($value = null) {
-		if (!is_null($value))
-			$this->set($value);
-	}
+    public function get($default = null)
+    {
+        return is_numeric($this->value) ? $this->value : $default;
+    }
 
-	public function get($default = null) {
-		return is_numeric($this->value) ? $this->value : $default;
-	}
+    public function set($value)
+    {
+        $this->value = (int)$value;
 
-	public function set($value) {
-		$this->value = (int)$value;
-		
-		return $this;
-	}
-
+        return $this;
+    }
 }

@@ -1,25 +1,30 @@
 <?php
+
 namespace YeTii\MultiScraper\Attributes;
 
-class Description {
+class Description
+{
+    protected $value;
 
-	protected $value;
+    public function __construct($value = null)
+    {
+        if (!is_null($value)) {
+            $this->set($value);
+        }
+    }
 
-	function __construct($value = null) {
-		if (!is_null($value))
-			$this->set($value);
-	}
+    public function get($default = null)
+    {
+        return is_string($this->value) ? $this->value : $default;
+    }
 
-	public function get($default = null) {
-		return is_string($this->value) ? $this->value : $default;
-	}
+    public function set($value)
+    {
+        if (!is_string($value)) {
+            throw new \Exception("Invalid Description", 1);
+        }
+        $this->value = trim($value);
 
-	public function set($value) {
-		if (!is_string($value))
-			throw new \Exception("Invalid Description", 1);
-		$this->value = trim($value);
-		
-		return $this;
-	}
-
+        return $this;
+    }
 }
