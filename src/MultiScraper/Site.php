@@ -9,6 +9,7 @@ use YeTii\MultiScraper\Attributes\Files;
 use YeTii\MultiScraper\Attributes\FileSize;
 use YeTii\MultiScraper\Attributes\Hash;
 use YeTii\MultiScraper\Attributes\MagnetLink;
+use YeTii\MultiScraper\Attributes\Tracker;
 use YeTii\MultiScraper\Attributes\Trackers;
 
 /**
@@ -507,6 +508,7 @@ class Site
 
             if (isset($torrent->trackers) && $torrent->trackers->get() && isset($torrent->title) && isset($torrent->hash)) {
                 $trackers = '';
+                /** @var Tracker $tracker */
                 foreach ($torrent->trackers->get() as $tracker) {
                     $trackers .= "&tr=" . urlencode($tracker->get());
                 }
