@@ -11,10 +11,22 @@ use YeTii\MultiScraper\Attributes\Hash;
 use YeTii\MultiScraper\Attributes\MagnetLink;
 use YeTii\MultiScraper\Attributes\Trackers;
 
+/**
+ * Class Site
+ */
 class Site
 {
+    /**
+     * @var array
+     */
     protected $urls = [];
+    /**
+     * @var array
+     */
     protected $attributes = [];
+    /**
+     * @var array
+     */
     protected $available_attributes = [
         'title',
         'hash',
@@ -31,8 +43,17 @@ class Site
         'user',
         'id'
     ];
+    /**
+     * @var array
+     */
     protected $methods = [];
+    /**
+     * @var string
+     */
     protected $name = '';
+    /**
+     * @var bool
+     */
     protected $debug = true;
 
 
@@ -40,6 +61,10 @@ class Site
      + ==========            Init              ===========
      + =================================================== */
 
+    /**
+     * Site constructor.
+     * @param null $args
+     */
     public function __construct($args = null)
     {
         if (is_string($args)) {
@@ -53,6 +78,12 @@ class Site
         }
     }
 
+    /**
+     * Get an attribute
+     *
+     * @param string $name
+     * @return mixed|null
+     */
     public function __get($name)
     {
         if (isset($this->{$name})) {
@@ -62,11 +93,23 @@ class Site
         }
     }
 
+    /**
+     * Set an attribute
+     *
+     * @param string $name
+     * @param mixed  $value
+     */
     public function __set($name, $value)
     {
         $this->{$name} = $value;
     }
 
+    /**
+     * Set the $name property
+     *
+     * @param $name
+     * @return $this
+     */
     public function add($name)
     {
         $this->name = $name;
@@ -79,6 +122,12 @@ class Site
      + ==========            URLs              ===========
      + =================================================== */
 
+    /**
+     * Add a set of URLs to the $urls property
+     *
+     * @param array $data
+     * @return $this
+     */
     public function addUrl($data)
     {
         foreach ($data as $key => $value) {
@@ -88,6 +137,13 @@ class Site
         return $this;
     }
 
+    /**
+     * Get a URL from the $urls property
+     *
+     * @param string     $name
+     * @param array|null $args
+     * @return bool|string
+     */
     public function getUrl($name, array $args = null)
     {
         if (!isset($this->urls['base'])) {
@@ -134,6 +190,12 @@ class Site
      + ==========         Attributes           ===========
      + =================================================== */
 
+    /**
+     * Add a new attribute
+     *
+     * @param array|object $data
+     * @return $this
+     */
     public function addAttribute($data)
     {
         foreach ($data as $key => $value) {
@@ -161,6 +223,12 @@ class Site
         return $this;
     }
 
+    /**
+     * Get the class name of an attribute
+     *
+     * @param string $key
+     * @return string
+     */
     public function getAttributeClass($key)
     {
         $new = 'YeTii\\MultiScraper\\Attributes\\';
@@ -171,6 +239,12 @@ class Site
         return $new;
     }
 
+    /**
+     * Get an attribute that has been set
+     *
+     * @param string $name
+     * @return bool|mixed
+     */
     public function getAttribute($name)
     {
         return isset($this->attributes[$name]) ? $this->attributes[$name] : false;
@@ -182,6 +256,12 @@ class Site
      + =================================================== */
 
 
+    /**
+     * Add a new method/callback for the site
+     *
+     * @param array|object $data
+     * @return $this
+     */
     public function addMethod($data)
     {
         foreach ($data as $key => $value) {
@@ -205,16 +285,29 @@ class Site
         return $this;
     }
 
+    /**
+     * Return a requested method
+     *
+     * @param string $name
+     * @return bool|mixed
+     */
     public function getMethod($name)
     {
         return isset($this->methods[$name]) ? $this->methods[$name] : false;
     }
 
+    /**
+     * Execute a specified method
+     *
+     * @param string $name
+     * @param mixed $args
+     * @return mixed|null
+     */
     private function runMethod($name, $args)
     {
         if (!$method = $this->getMethod($name)) {
             // log
-            return;
+            return null;
         }
         $m = null;
         if ($method->match) {
@@ -235,6 +328,13 @@ class Site
      + ==========          Scraping            ===========
      + =================================================== */
 
+    /**
+     * Scrape the latest torrents for a site
+     *
+     * @param int $page
+     * @return array|object
+     * @throws \Exception
+     */
     public function scrapeLatest(int $page = 1)
     {
         $torrents = [];
@@ -258,6 +358,14 @@ class Site
         return crawl_attribute($torrents);
     }
 
+    /**
+     * Scrape search results for a site
+     *
+     * @param string $query
+     * @param int    $page
+     * @return array|object
+     * @throws \Exception
+     */
     public function scrapeSearch(string $query, int $page = 1)
     {
         $torrents = [];
@@ -281,6 +389,14 @@ class Site
         return crawl_attribute($torrents);
     }
 
+    /**
+     * Scrape a user's torrents for a site
+     *
+     * @param string $user
+     * @param int    $page
+     * @return array|object
+     * @throws \Exception
+     */
     public function scrapeUser(string $user, int $page = 1)
     {
         $torrents = [];
@@ -304,6 +420,13 @@ class Site
         return crawl_attribute($torrents);
     }
 
+    /**
+     * Scrape a specific torrent for a site
+     *
+     * @param $args
+     * @return \stdClass
+     * @throws \Exception
+     */
     public function scrapeTorrent($args)
     {
         $torrent = new \stdClass;
@@ -406,6 +529,12 @@ class Site
      + ==========          General             ===========
      + =================================================== */
 
+    /**
+     * Get the HTML for a site using the caching system
+     *
+     * @param string $url
+     * @return bool|null|string
+     */
     private function getHtml(string $url)
     {
         if (!file_exists('cache')) {
