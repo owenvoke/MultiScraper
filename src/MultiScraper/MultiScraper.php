@@ -1,79 +1,91 @@
 <?php
+
 namespace YeTii\MultiScraper;
 
-use \JJG\Request;
-use \YeTii\General\Str;
+class MultiScraper
+{
+    private $debug = true;
 
-class MultiScraper {
+    protected $sites = [];
 
-	private $debug = true;
+    protected $user = null;
+    protected $query = null;
+    protected $page = 1;
 
-	protected $sites = [];
+    protected $torrents = [];
 
-	protected $user = null;
-	protected $query = null;
-	protected $page = 1;
+    function __construct(array $args = null)
+    {
 
-	protected $torrents = [];
+    }
 
-	function __construct(array $args = null) {
-		
-	}
+    function __get(string $name)
+    {
+        return isset($this->{$name}) ? $this->{$name} : null;
+    }
 
-	function __get(string $name) {
-		return isset($this->{$name}) ? $this->{$name} : null;
-	}
+    function __set(string $name, $value)
+    {
+        $this->{$name} = $value;
+    }
 
-	function __set(string $name, $value) {
-		$this->{$name} = $value;
-	}
+    public function initalize()
+    {
+        $this->sites = require __DIR__ . '/scrapers.php';
+    }
 
-	public function initalize() {
-		$this->sites = require __DIR__.'/scrapers.php';
-	}
+    public function latest($page = 1)
+    {
+        if (!$this->initalized) {
+            $this->initalize();
+        }
+        $this->page = $page;
 
-	public function latest($page = 1) {
-		if (!$this->initalized)
-			$this->initalize();
-		$this->page = $page;
-		return $this->scrape();
-	}
+        return $this->scrape();
+    }
 
-	public function search($query, $page = 1) {
-		if (!$this->initalized)
-			$this->initalize();
-		$this->query = $query;
-		$this->page = $page;
-		return $this->scrape();
-	}
+    public function search($query, $page = 1)
+    {
+        if (!$this->initalized) {
+            $this->initalize();
+        }
+        $this->query = $query;
+        $this->page = $page;
 
-	public function user($user, $page = 1) {
-		if (!$this->initalized)
-			$this->initalize();
-		$this->user = $user;
-		$this->page = $page;
-		return $this->scrape();
-	}
+        return $this->scrape();
+    }
 
-	public function scrape() {
-		$all = [];
-		if (!$this->sites) return false;
-		foreach ($this->sites as $site) {
-			$torrents = null;
-			if ($this->user) {
-				$torrents = $site->scrapeUser($this->user, $this->page);
-			}elseif ($this->query) {
-				$torrents = $site->scrapeSearch($this->query, $this->page);
-			}else {
-				$torrents = $site->scrapeLatest($this->page);
-			}
-			if ($torrents) {
-				$all = array_merge($all, $torrents);
-			}
-		}
-		return $all;
-	}
+    public function user($user, $page = 1)
+    {
+        if (!$this->initalized) {
+            $this->initalize();
+        }
+        $this->user = $user;
+        $this->page = $page;
 
+        return $this->scrape();
+    }
 
+    public function scrape()
+    {
+        $all = [];
+        if (!$this->sites) {
+            return false;
+        }
+        foreach ($this->sites as $site) {
+            $torrents = null;
+            if ($this->user) {
+                $torrents = $site->scrapeUser($this->user, $this->page);
+            } elseif ($this->query) {
+                $torrents = $site->scrapeSearch($this->query, $this->page);
+            } else {
+                $torrents = $site->scrapeLatest($this->page);
+            }
+            if ($torrents) {
+                $all = array_merge($all, $torrents);
+            }
+        }
 
+        return $all;
+    }
 }
