@@ -38,7 +38,7 @@ class MultiScraper
      */
     public function __construct(array $args = null)
     {
-
+        $this->sites = require __DIR__ . '/scrapers.php';
     }
 
     /**
@@ -64,14 +64,6 @@ class MultiScraper
     }
 
     /**
-     * Initialise the sites
-     */
-    public function initalize()
-    {
-        $this->sites = require __DIR__ . '/scrapers.php';
-    }
-
-    /**
      * Get the latest torrents from a site
      *
      * @param int $page
@@ -79,9 +71,6 @@ class MultiScraper
      */
     public function latest($page = 1)
     {
-        if (!$this->initalized) {
-            $this->initalize();
-        }
         $this->page = $page;
 
         return $this->scrape();
