@@ -71,11 +71,9 @@ class Site
         if (is_string($args)) {
             $this->name = $args;
         } elseif (is_array($args) || is_object($args)) {
-            $this->instance = $instance;
             foreach ($args as $key => $value) {
                 $this->attributes[$key] = $value;
             }
-            $this->dirty = $this->attributes;
         }
     }
 
