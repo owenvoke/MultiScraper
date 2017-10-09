@@ -85,9 +85,6 @@ class MultiScraper
      */
     public function search($query, $page = 1)
     {
-        if (!$this->initalized) {
-            $this->initalize();
-        }
         $this->query = $query;
         $this->page = $page;
 
@@ -103,9 +100,6 @@ class MultiScraper
      */
     public function user($user, $page = 1)
     {
-        if (!$this->initalized) {
-            $this->initalize();
-        }
         $this->user = $user;
         $this->page = $page;
 
