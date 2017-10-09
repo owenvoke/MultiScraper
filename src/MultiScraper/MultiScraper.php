@@ -34,6 +34,7 @@ class MultiScraper
 
     /**
      * MultiScraper constructor.
+     *
      * @param array|null $args
      */
     public function __construct(array $args = null)

@@ -63,6 +63,7 @@ class Site
 
     /**
      * Site constructor.
+     *
      * @param null $args
      */
     public function __construct($args = null)
