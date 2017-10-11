@@ -2,6 +2,13 @@
 
 use YeTii\General\Str;
 
+/**
+ * Format an integer to a bytes string
+ *
+ * @param int $bytes
+ * @param int $precision
+ * @return string
+ */
 function format_bytes($bytes, $precision = 2)
 {
     $units = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -13,6 +20,12 @@ function format_bytes($bytes, $precision = 2)
     return round($bytes, $precision) . ' ' . $units[$pow];
 }
 
+/**
+ * Print, and then optionally die
+ *
+ * @param mixed $var
+ * @param bool  $die
+ */
 function printDie($var, $die = true)
 {
     $var = print_r($var, true);
@@ -25,6 +38,12 @@ function printDie($var, $die = true)
     }
 }
 
+/**
+ * Convert a string to bytes
+ *
+ * @param string $str
+ * @return int|null
+ */
 function strtobytes($str)
 {
     preg_match('/(\d+(?:\.\d+|))(?:&nbsp;|\W)*(b|k|m|g|t|p)/i', $str, $m);
@@ -51,6 +70,12 @@ function strtobytes($str)
     return (int)($multiplier * $m[1]);
 }
 
+/**
+ * Check if an object is an attribute
+ *
+ * @param object $obj
+ * @return bool
+ */
 function is_attribute($obj)
 {
     if (!is_object($obj)) {
@@ -61,6 +86,12 @@ function is_attribute($obj)
     return Str::startsWith($class, 'YeTii\\MultiScraper\\Attributes\\');
 }
 
+/**
+ * Crawl data for an attribute
+ *
+ * @param mixed $obj
+ * @return array|object
+ */
 function crawl_attribute($obj)
 {
     if (is_attribute($obj)) {
@@ -77,6 +108,13 @@ function crawl_attribute($obj)
     }
 }
 
+/**
+ * Get information from a torrent file
+ *
+ * @param string $input
+ * @return array|bool|null|string
+ * @throws Exception
+ */
 function torrent_info($input)
 {
     if (file_exists($input) || preg_match('/^https??:\/\//', $input)) {
@@ -93,6 +131,12 @@ function torrent_info($input)
     return isset($bencode['info_hash']) ? $bencode : null;
 }
 
+/**
+ * Parse a torrent file using the data string
+ *
+ * @param mixed $s
+ * @return array|bool|string
+ */
 function parse_torrent($s)
 {
     static $str;

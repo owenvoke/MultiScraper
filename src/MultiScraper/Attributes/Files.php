@@ -2,10 +2,21 @@
 
 namespace YeTii\MultiScraper\Attributes;
 
+/**
+ * Class Files
+ */
 class Files
 {
+    /**
+     * @var mixed
+     */
     protected $value;
 
+    /**
+     * Files constructor.
+     *
+     * @param mixed $value
+     */
     public function __construct($value = null)
     {
         if (!is_null($value)) {
@@ -13,11 +24,23 @@ class Files
         }
     }
 
+    /**
+     * Get the attribute's value
+     *
+     * @param mixed $default
+     * @return array|null
+     */
     public function get($default = null)
     {
         return is_array($this->value) ? $this->value : $default;
     }
 
+    /**
+     * Set the attribute's value
+     *
+     * @param array $value
+     * @return $this
+     */
     public function set(array $value)
     {
         $this->value = [];
@@ -29,6 +52,12 @@ class Files
         return $this;
     }
 
+    /**
+     * Add a value to the attribute
+     *
+     * @param array|object $value
+     * @return $this
+     */
     public function add($value)
     {
         if (is_array($value)) {
@@ -51,6 +80,12 @@ class Files
         return $this;
     }
 
+    /**
+     * Remove a value to the attribute
+     *
+     * @param $key
+     * @return $this
+     */
     public function remove($key)
     {
         if (isset($this->value[$key])) {

@@ -2,10 +2,21 @@
 
 namespace YeTii\MultiScraper\Attributes;
 
+/**
+ * Class Trackers
+ */
 class Trackers
 {
+    /**
+     * @var array
+     */
     protected $value;
 
+    /**
+     * Trackers constructor.
+     *
+     * @param null|array $value
+     */
     public function __construct($value = null)
     {
         if (!is_null($value)) {
@@ -13,15 +24,28 @@ class Trackers
         }
     }
 
+    /**
+     * Get the attribute's value
+     *
+     * @param null|array $default
+     * @return array|null
+     */
     public function get($default = null)
     {
         return is_array($this->value) ? $this->value : $default;
     }
 
+    /**
+     * Set the attribute's value
+     *
+     * @param array $value
+     * @return $this
+     */
     public function set(array $value)
     {
         $this->value = [];
 
+        /** @var Tracker $tracker */
         foreach ($value as $tracker) {
             $this->add($tracker);
         }
@@ -29,6 +53,12 @@ class Trackers
         return $this;
     }
 
+    /**
+     * Add a tracker to the attribute
+     *
+     * @param array|Tracker $value
+     * @return $this
+     */
     public function add($value)
     {
         if (is_array($value)) {
@@ -47,6 +77,12 @@ class Trackers
         return $this;
     }
 
+    /**
+     * Remove a tracker from the attribute
+     *
+     * @param string $key
+     * @return $this
+     */
     public function remove($key)
     {
         if (isset($this->value[$key])) {
