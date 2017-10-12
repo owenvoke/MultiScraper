@@ -2,8 +2,6 @@
 
 namespace YeTii\MultiScraper;
 
-use YeTii\MultiScraper\Site;
-
 /**
  * Class MultiScraper
  */
@@ -150,7 +148,7 @@ class MultiScraper
     /**
      * Require certain fields in order to successfully return torrent
      *
-     * @param string|array $args
+     * @throws \Exception
      */
     public function require_fields()
     {
@@ -160,7 +158,7 @@ class MultiScraper
                 foreach ($arg as $ar) {
                     $this->require_field($ar);
                 }
-            }else{
+            } else {
                 $this->require_field($arg);
             }
         }
@@ -179,15 +177,21 @@ class MultiScraper
      * Add a required field a torrent must have
      *
      * @param string $name
+     * @throws \Exception
      */
     public function require_field($name)
     {
-        if (!is_string($name)) throw new \Exception("Invalid field (non-string)", 1);
+        if (!is_string($name)) {
+            throw new \Exception("Invalid field (non-string)", 1);
+        }
         $available = (new Site())->available_attributes;
-        if (!in_array($name, $available)) throw new \Exception("Unknown field name: `{$name}`", 1);
-        
-        if (!in_array($name, $this->require_fields))
+        if (!in_array($name, $available)) {
+            throw new \Exception("Unknown field name: `{$name}`", 1);
+        }
+
+        if (!in_array($name, $this->require_fields)) {
             $this->require_fields[] = $name;
+        }
     }
 
     /**
@@ -198,7 +202,9 @@ class MultiScraper
      */
     public function only_valid_torrents(array $torrents)
     {
-        if (empty($this->require_fields)) return $torrents;
+        if (empty($this->require_fields)) {
+            return $torrents;
+        }
         $valid = [];
         foreach ($torrents as $torrent) {
             $is_valid = true;
@@ -213,6 +219,7 @@ class MultiScraper
                 // printDie("Keeping {$torrent->hash} - Meets all criteria :)", false);
             }
         }
+
         return $valid;
     }
 
