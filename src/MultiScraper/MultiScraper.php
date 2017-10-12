@@ -2,6 +2,8 @@
 
 namespace YeTii\MultiScraper;
 
+use YeTii\MultiScraper\Site;
+
 /**
  * Class MultiScraper
  */
@@ -31,6 +33,14 @@ class MultiScraper
      * @var array
      */
     protected $torrents = [];
+    /**
+     * @var array
+     */
+    protected $require_fields = [];
+    /**
+     * @var bool
+     */
+    protected $require_all = false;
 
     /**
      * MultiScraper constructor.
@@ -132,6 +142,78 @@ class MultiScraper
             }
         }
 
+        $all = $this->only_valid_torrents($all);
+
         return $all;
     }
+
+    /**
+     * Require certain fields in order to successfully return torrent
+     *
+     * @param string|array $args
+     */
+    public function require_fields()
+    {
+        $args = func_get_args();
+        foreach ($args as $arg) {
+            if (is_array($arg)) {
+                foreach ($arg as $ar) {
+                    $this->require_field($ar);
+                }
+            }else{
+                $this->require_field($arg);
+            }
+        }
+    }
+
+    /**
+     * Require all fields in order to successfully return torrent
+     *
+     */
+    public function require_all()
+    {
+        $this->require_fields = (new Site())->available_attributes;
+    }
+
+    /**
+     * Add a required field a torrent must have
+     *
+     * @param string $name
+     */
+    public function require_field($name)
+    {
+        if (!is_string($name)) throw new \Exception("Invalid field (non-string)", 1);
+        $available = (new Site())->available_attributes;
+        if (!in_array($name, $available)) throw new \Exception("Unknown field name: `{$name}`", 1);
+        
+        if (!in_array($name, $this->require_fields))
+            $this->require_fields[] = $name;
+    }
+
+    /**
+     * Check if all required fields are present in an array of torrents
+     *
+     * @param array $torrents
+     * @return array
+     */
+    public function only_valid_torrents(array $torrents)
+    {
+        if (empty($this->require_fields)) return $torrents;
+        $valid = [];
+        foreach ($torrents as $torrent) {
+            $is_valid = true;
+            foreach ($this->require_fields as $field) {
+                if (!isset($torrent->{$field})) {
+                    $is_valid = false;
+                    // printDie("Failing {$torrent->hash} - Does not meet criteria (missing: `$field`)", false);
+                }
+            }
+            if ($is_valid) {
+                $valid[] = $torrent;
+                // printDie("Keeping {$torrent->hash} - Meets all criteria :)", false);
+            }
+        }
+        return $valid;
+    }
+
 }
