@@ -2,6 +2,8 @@
 
 namespace YeTii\MultiScraper;
 
+use Monolog\Logger;
+
 /**
  * Class MultiScraper
  */
@@ -39,15 +41,21 @@ class MultiScraper
      * @var bool
      */
     protected $require_all = false;
+    /**
+     * @var Logger|null
+     */
+    protected $logger = null;
 
     /**
      * MultiScraper constructor.
      *
-     * @param array|null $args
+     * @param array|null  $args
+     * @param Logger|null $logger
      */
-    public function __construct(array $args = null)
+    public function __construct(array $args = null, $logger = null)
     {
         $this->sites = require __DIR__ . '/scrapers.php';
+        $this->logger = $logger;
     }
 
     /**
@@ -128,6 +136,8 @@ class MultiScraper
         }
         foreach ($this->sites as $site) {
             $torrents = null;
+            $site->logger = $this->logger;
+
             if ($this->user) {
                 $torrents = $site->scrapeUser($this->user, $this->page);
             } elseif ($this->query) {
