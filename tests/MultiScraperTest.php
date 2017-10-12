@@ -28,9 +28,9 @@ class MultiScraperTest extends TestCase
      */
     public function testCanGetLatest()
     {
-        $latest = self::$instance->latest();
-        $this->assertArrayHasKey(0, $latest);
-        $this->assertInstanceOf(stdClass::class, $latest[0]);
+        $results = self::$instance->latest();
+        $this->assertArrayHasKey(0, $results);
+        $this->assertInstanceOf(stdClass::class, $results[0]);
     }
 
     /**
@@ -38,9 +38,9 @@ class MultiScraperTest extends TestCase
      */
     public function testCanGetByUsername()
     {
-        $latest = self::$instance->user('ettv');
-        $this->assertArrayHasKey(0, $latest);
-        $this->assertInstanceOf(stdClass::class, $latest[0]);
+        $results = self::$instance->user('ettv');
+        $this->assertArrayHasKey(0, $results);
+        $this->assertInstanceOf(stdClass::class, $results[0]);
     }
 
     /**
@@ -48,8 +48,8 @@ class MultiScraperTest extends TestCase
      */
     public function testCanGetBySearchQuery()
     {
-        $latest = self::$instance->user('ettv');
-        $this->assertArrayHasKey(0, $latest);
-        $this->assertInstanceOf(stdClass::class, $latest[0]);
+        $results = self::$instance->user('ettv');
+        $this->assertArrayHasKey(0, $results);
+        $this->assertInstanceOf(stdClass::class, $results[0]);
     }
 }
