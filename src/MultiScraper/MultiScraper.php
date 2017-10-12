@@ -41,6 +41,14 @@ class MultiScraper
      * @var bool
      */
     protected $require_all = false;
+    /**
+     * @var bool
+     */
+    protected $readable_bytes = false;
+    /**
+     * @var bool
+     */
+    protected $nested_files = false;
 
     /**
      * MultiScraper constructor.
@@ -143,6 +151,12 @@ class MultiScraper
         }
 
         $all = $this->only_valid_torrents($all);
+        if ($this->readable_bytes) {
+            $all = $this->make_readable_bytes($all);
+        }
+        if ($this->nested_files) {
+            $all = $this->make_nested_files($all);
+        }
 
         return $all;
     }
@@ -214,6 +228,63 @@ class MultiScraper
             }
         }
         return $valid;
+    }
+
+    /**
+     * Set state for Readable Bytes config
+     *
+     * @param bool $state
+     */
+    public function readable_bytes(bool $state = true)
+    {
+        $this->readable_bytes = $state;
+    }
+
+    /**
+     * Execute Readable Bytes config
+     *
+     * @param array $torrents
+     */
+    private function make_readable_bytes(array $torrents)
+    {
+        foreach ($torrents as &$torrent) {
+            if (isset($torrent->file_size)) {
+                $torrent->file_size = format_bytes($torrent->file_size);
+            }
+            if (isset($torrent->files)) {
+                foreach ($torrent->files as &$file) {
+                    if (isset($file->file_size)) {
+                        $file->file_size = format_bytes($file->file_size);
+                    }
+                }
+            }
+        }
+        return $torrents;
+    }
+
+    /**
+     * Set state for Nested Files config
+     *
+     * @param bool $state
+     */
+    public function nested_files(bool $state = true)
+    {
+        $this->nested_files = $state;
+    }
+
+    /**
+     * Execute Nested Files config
+     *
+     * @param bool $state
+     */
+    private function make_nested_files(array $torrents)
+    {
+        foreach ($torrents as &$torrent) {
+            if (isset($torrent->files)) {
+                $torrent->files = nest_files($torrent->files);
+            }
+        }
+        return $torrents;
     }
 
 }

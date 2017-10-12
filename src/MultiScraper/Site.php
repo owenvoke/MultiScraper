@@ -516,8 +516,7 @@ class Site
                 $torrent->magnet_link = new MagnetLink('magnet:?xt=urn:btih:'
                                                        . $torrent->hash->get()
                                                        . '&dn='
-                                                       . preg_replace('/\&/', '%26',
-                        $torrent->title->get())
+                                                       . preg_replace('/\&/', '%26', $torrent->title->get())
                                                        . $trackers);
             }
         }
