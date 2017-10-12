@@ -43,7 +43,8 @@ $scraper->convert_images('jpg'); // Convert any scraped images
 #### Logging
 
 This package supports logging using [Monolog](https://packagist.org/packages/monolog/monolog).  
-To enable this, you will need to create a new instance of `Monolog\Logger`. Then attach some handlers to it using `$log->pushHandler()`.
+To enable this, you will need to create a new instance of `Monolog\Logger`.  
+Next attach some handlers to it using `$log->pushHandler()`.
 
 ```php
 $log = new Monolog\Logger;
