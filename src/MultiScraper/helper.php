@@ -6,18 +6,35 @@ use YeTii\General\Str;
  * Format an integer to a bytes string
  *
  * @param int $bytes
- * @param int $precision
  * @return string
  */
-function format_bytes($bytes, $precision = 2)
+function format_bytes($bytes)
 {
-    $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-    $bytes = max($bytes, 0);
-    $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-    $pow = min($pow, count($units) - 1);
-    $bytes /= pow(1024, $pow);
+    if (!$bytes) return "0.00 B";
+    $s = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
+    $e = floor(log($bytes, 1024));
+    return round($bytes/pow(1024, $e), 2).$s[$e];
+}
 
-    return round($bytes, $precision) . ' ' . $units[$pow];
+/**
+ * Format files array into nested directory array tree
+ *
+ * @param array $files
+ * @return string
+ */
+function nest_files(array $files) {
+    $return = [];
+    foreach ($files as $file) {
+        $tmp =& $return;
+        foreach (explode('/', Str::beforeLast($file->path, '/')) as $p) {
+            if (!$p) continue;
+            if (!isset($tmp[$p]))
+                $tmp[$p] = [];
+            $tmp =& $tmp[$p];
+        }
+        $tmp[Str::afterLast($file->path, '/')] = $file;
+    }
+    return $return;
 }
 
 /**
