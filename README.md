@@ -4,8 +4,13 @@ A multi-site torrent scraper
 
 ## Installation
 
-Require through composer:
+Require through composer:  
 `composer require undeadyetii/multiscraper`
+
+## Unit Testing
+
+This package uses [PHPUnit](https://phpunit.de) for it's unit tests. To run the test suite, use the following:  
+`php vendor/bin/phpunit` or `phpunit` (if installed globally)
 
 #### How to use:
 ```php
