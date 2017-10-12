@@ -18,6 +18,9 @@ $scraper = new \YeTii\MultiScraper\MultiScraper();
 $scraper->latest(); // scrape the latest pages over all sites
 $scraper->latest(2); // scrape latest page#2 over all sites
 $scraper->search('Rick and Morty'); // search for a query over all sites
+$scraper->require_fields('title', 'hash'); // require title AND hash, otherwise trash the torrent
+$scraper->require_fields(['title', 'date_created', 'trackers']); // require an array of fields
+$scraper->require_all(); // require ALL fields, otherwise trash the torrent
 ```
 
 #### Features coming soon:
