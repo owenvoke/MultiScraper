@@ -16,6 +16,9 @@
         "undeadyetii/libraries": "^0.1.3",
         "geerlingguy/request": "1.x-dev"
     },
+    "require-dev": {
+        "phpunit/phpunit": "6.4.1"
+    },
     "autoload": {
         "psr-4": {
             "YeTii\\": "src/"
