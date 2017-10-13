@@ -2,6 +2,7 @@
 
 namespace YeTii\MultiScraper\Sites;
 
+use YeTii\MultiScraper\Category;
 use YeTii\MultiScraper\Site;
 
 /**
@@ -24,7 +25,7 @@ class ThePirateBay extends Site
             'torrent'  => '/torrent/$torrent_id/',
             'search'   => '/search/$query/$page-1/7//',
             'category' => '/browse/$category/$page-1/3',
-            'user'     => '/user/$username/$page-1/3',
+            'user'     => '/user/$user/$page-1/3',
             'files'    => '/ajax_details_filelist.php?id=$torrent_id&turing=iamhuman'
         ]);
 
@@ -102,6 +103,17 @@ class ThePirateBay extends Site
             'extract_rows' => [
                 'match_all' => '/<tr[^>]*>.+?<a href="\/torrent\/(\d+)\/.+?<\/tr>/is',
             ]
+        ]);
+
+        $this->addCategory([
+            Category::MOVIES       => 201,
+            Category::TV           => 205,
+            Category::GAMES        => 400,
+            Category::MUSIC        => 101,
+            Category::APPLICATIONS => 300,
+            Category::BOOKS        => 601,
+            Category::XXX          => 500,
+            Category::OTHER        => 600,
         ]);
     }
 }

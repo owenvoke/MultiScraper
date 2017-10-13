@@ -26,6 +26,10 @@ class MultiScraper
      */
     protected $query = null;
     /**
+     * @var null
+     */
+    protected $category = null;
+    /**
      * @var int
      */
     protected $page = 1;
@@ -144,6 +148,21 @@ class MultiScraper
     }
 
     /**
+     * Get torrents that match a category
+     *
+     * @param int $category
+     * @param int $page
+     * @return array
+     */
+    public function category($category, $page = 1)
+    {
+        $this->category = $category;
+        $this->page = $page;
+
+        return $this->scrape();
+    }
+
+    /**
      * Scrape a page for torrent data
      *
      * @return array|bool
@@ -160,6 +179,8 @@ class MultiScraper
 
             if ($this->user) {
                 $torrents = $site->scrapeUser($this->user, $this->page);
+            } elseif ($this->category) {
+                $torrents = $site->scrapeCategory($this->category, $this->page);
             } elseif ($this->query) {
                 $torrents = $site->scrapeSearch($this->query, $this->page);
             } else {

@@ -2,6 +2,7 @@
 
 namespace YeTii\MultiScraper\Sites;
 
+use YeTii\MultiScraper\Category;
 use YeTii\MultiScraper\Site;
 
 /**
@@ -87,6 +88,16 @@ class Demonoid extends Site
             'parse_torrent' => [
                 'match' => '/<a href="(https:\/\/www\.hypercache\.pw[^"]+)">/ism'
             ]
+        ]);
+
+        $this->addCategory([
+            Category::MOVIES       => 1,
+            Category::TV           => 3,
+            Category::GAMES        => 4,
+            Category::MUSIC        => 2,
+            Category::APPLICATIONS => 5,
+            Category::BOOKS        => 11,
+            Category::OTHER        => 6,
         ]);
     }
 }

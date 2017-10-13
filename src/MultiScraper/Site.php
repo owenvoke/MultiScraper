@@ -50,6 +50,10 @@ class Site
      */
     protected $methods = [];
     /**
+     * @var array
+     */
+    protected $categories = [];
+    /**
      * @var string
      */
     protected $name = '';
@@ -124,6 +128,26 @@ class Site
 
 
     /* ===================================================
+     + ==========         Categories           ===========
+     + =================================================== */
+
+    /**
+     * Add a set of categories to the $categories property
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function addCategory($data)
+    {
+        foreach ($data as $key => $value) {
+            $this->categories[$key] = $value;
+        }
+
+        return $this;
+    }
+
+
+    /* ===================================================
      + ==========            URLs              ===========
      + =================================================== */
 
@@ -175,7 +199,8 @@ class Site
             $endpoint = preg_replace('/\$user/', $args['user'], $endpoint);
         }
         if (strpos($endpoint, '$category')) {
-            $endpoint = preg_replace('/\$category/', $args['category'], $endpoint);
+            $category = $this->categories[$args['category']] ?? null;
+            $endpoint = preg_replace('/\$category/', $category, $endpoint);
         }
         if (strpos($endpoint, '$id')) {
             $endpoint = preg_replace('/\$id/', $args['id'], $endpoint);
@@ -419,6 +444,37 @@ class Site
                 }
             } else {
                 $this->log('Failed to scrape the user\'s torrents.', Logger::WARNING);
+            }
+        }
+
+        return crawl_attribute($torrents);
+    }
+
+    /**
+     * Scrape a category's torrents for a site
+     *
+     * @param string $category
+     * @param int    $page
+     * @return array|object
+     * @throws \Exception
+     */
+    public function scrapeCategory(string $category, int $page = 1)
+    {
+        $torrents = [];
+        if ($url = $this->getUrl('category', ['category' => $category, 'page' => $page])) {
+            $html = $this->getHtml($url);
+            if ($html) {
+                $torrent_ids = $this->runMethod('extract_rows', ['html' => $html]);
+                if ($torrent_ids) {
+                    foreach ($torrent_ids as $torrent_id) {
+                        $t = $this->scrapeTorrent(['torrent_id' => $torrent_id]);
+                        if (isset($t->title)) {
+                            $torrents[] = $t;
+                        }
+                    }
+                }
+            } else {
+                $this->log('Failed to scrape the category\'s torrents.', Logger::WARNING);
             }
         }
 

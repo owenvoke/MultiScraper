@@ -2,6 +2,7 @@
 
 namespace YeTii\MultiScraper\Sites;
 
+use YeTii\MultiScraper\Category;
 use YeTii\MultiScraper\Site;
 
 /**
@@ -99,6 +100,16 @@ class LimeTorrents extends Site
             'extract_rows' => [
                 'match_all' => '/<tr[^>]*><td[^>]*>.+?<a href="\/[^">]+-torrent-(\d+)/ism',
             ]
+        ]);
+
+        $this->addCategory([
+            Category::MOVIES       => 'Movies',
+            Category::TV           => 'TV-shows',
+            Category::GAMES        => 'Games',
+            Category::MUSIC        => 'Music',
+            Category::APPLICATIONS => 'Applications',
+            Category::BOOKS        => 'Other-E-Books',
+            Category::OTHER        => 'Other',
         ]);
     }
 }
