@@ -24,7 +24,7 @@ class ThePirateBay extends Site
             'torrent'  => '/torrent/$torrent_id/',
             'search'   => '/search/$query/$page-1/7//',
             'category' => '/browse/$category/$page-1/3',
-            'user'     => '/user/$username/$page-1/3',
+            'user'     => '/user/$user/$page-1/3',
             'files'    => '/ajax_details_filelist.php?id=$torrent_id&turing=iamhuman'
         ]);
 
