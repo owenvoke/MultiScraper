@@ -50,6 +50,10 @@ class Site
      */
     protected $methods = [];
     /**
+     * @var array
+     */
+    protected $categories = [];
+    /**
      * @var string
      */
     protected $name = '';
@@ -118,6 +122,26 @@ class Site
     public function add($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+
+    /* ===================================================
+     + ==========         Categories           ===========
+     + =================================================== */
+
+    /**
+     * Add a set of categories to the $categories property
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function addCategory($data)
+    {
+        foreach ($data as $key => $value) {
+            $this->categories[$key] = $value;
+        }
 
         return $this;
     }
