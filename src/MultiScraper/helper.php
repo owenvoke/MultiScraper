@@ -10,30 +10,38 @@ use YeTii\General\Str;
  */
 function format_bytes($bytes)
 {
-    if (!$bytes) return "0.00 B";
-    $s = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
+    if (!$bytes) {
+        return "0.00 B";
+    }
+    $s = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
     $e = floor(log($bytes, 1024));
-    return round($bytes/pow(1024, $e), 2).$s[$e];
+
+    return round($bytes / pow(1024, $e), 2) . $s[$e];
 }
 
 /**
  * Format files array into nested directory array tree
  *
  * @param array $files
- * @return string
+ * @return array
  */
-function nest_files(array $files) {
+function nest_files(array $files)
+{
     $return = [];
     foreach ($files as $file) {
         $tmp =& $return;
         foreach (explode('/', Str::beforeLast($file->path, '/')) as $p) {
-            if (!$p) continue;
-            if (!isset($tmp[$p]))
+            if (!$p) {
+                continue;
+            }
+            if (!isset($tmp[$p])) {
                 $tmp[$p] = [];
+            }
             $tmp =& $tmp[$p];
         }
         $tmp[Str::afterLast($file->path, '/')] = $file;
     }
+
     return $return;
 }
 

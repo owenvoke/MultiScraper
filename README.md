@@ -12,7 +12,8 @@ Require through composer:
 This package uses [PHPUnit](https://phpunit.de) for it's unit tests. To run the test suite, use the following:  
 `php vendor/bin/phpunit` or `phpunit` (if installed globally)
 
-#### How to use:
+#### How to use
+
 ```php
 $scraper = new \YeTii\MultiScraper\MultiScraper();
 
@@ -29,7 +30,7 @@ $scraper->readable_bytes(); // File sizes set as `4KB` instead of `4096` [bytes]
 $scraper->nested_files(); // return a file-tree array instead of `dir/dir/dir/file.ext`
 ```
 
-#### Features coming soon:
+#### Features coming soon
 
 ```php
 $scraper->category('Movies'); // Category scraping
@@ -37,4 +38,19 @@ $scraper->user('ettv'); // Cross-site User scraping (possibly not)
 
 $scraper->extract_images(); // Enable extraction of images from the torrent desc+page
 $scraper->convert_images('jpg'); // Convert any scraped images
+```
+
+#### Logging
+
+This package supports logging using [Monolog](https://packagist.org/packages/monolog/monolog).  
+To enable this, you will need to create a new instance of `Monolog\Logger`.  
+Next attach some handlers to it using `$log->pushHandler()`.
+
+```php
+$log = new Monolog\Logger;
+// Add handlers
+...
+
+$scraper = new YeTii\MultiScraper\MultiScraper($args, $log);
+...
 ```

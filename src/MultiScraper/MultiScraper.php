@@ -2,7 +2,7 @@
 
 namespace YeTii\MultiScraper;
 
-use YeTii\MultiScraper\Site;
+use Monolog\Logger;
 
 /**
  * Class MultiScraper
@@ -42,6 +42,10 @@ class MultiScraper
      */
     protected $require_all = false;
     /**
+     * @var Logger|null
+     */
+    protected $logger = null;
+    /**
      * @var bool
      */
     protected $readable_bytes = false;
@@ -53,11 +57,13 @@ class MultiScraper
     /**
      * MultiScraper constructor.
      *
-     * @param array|null $args
+     * @param array|null  $args
+     * @param Logger|null $logger
      */
-    public function __construct(array $args = null)
+    public function __construct(array $args = null, $logger = null)
     {
         $this->sites = require __DIR__ . '/scrapers.php';
+        $this->logger = $logger;
     }
 
     /**
@@ -138,6 +144,8 @@ class MultiScraper
         }
         foreach ($this->sites as $site) {
             $torrents = null;
+            $site->logger = $this->logger;
+
             if ($this->user) {
                 $torrents = $site->scrapeUser($this->user, $this->page);
             } elseif ($this->query) {
@@ -164,7 +172,7 @@ class MultiScraper
     /**
      * Require certain fields in order to successfully return torrent
      *
-     * @param string|array $args
+     * @throws \Exception
      */
     public function require_fields()
     {
@@ -174,7 +182,7 @@ class MultiScraper
                 foreach ($arg as $ar) {
                     $this->require_field($ar);
                 }
-            }else{
+            } else {
                 $this->require_field($arg);
             }
         }
@@ -193,15 +201,21 @@ class MultiScraper
      * Add a required field a torrent must have
      *
      * @param string $name
+     * @throws \Exception
      */
     public function require_field($name)
     {
-        if (!is_string($name)) throw new \Exception("Invalid field (non-string)", 1);
+        if (!is_string($name)) {
+            throw new \Exception("Invalid field (non-string)", 1);
+        }
         $available = (new Site())->available_attributes;
-        if (!in_array($name, $available)) throw new \Exception("Unknown field name: `{$name}`", 1);
-        
-        if (!in_array($name, $this->require_fields))
+        if (!in_array($name, $available)) {
+            throw new \Exception("Unknown field name: `{$name}`", 1);
+        }
+
+        if (!in_array($name, $this->require_fields)) {
             $this->require_fields[] = $name;
+        }
     }
 
     /**
@@ -212,7 +226,9 @@ class MultiScraper
      */
     public function only_valid_torrents(array $torrents)
     {
-        if (empty($this->require_fields)) return $torrents;
+        if (empty($this->require_fields)) {
+            return $torrents;
+        }
         $valid = [];
         foreach ($torrents as $torrent) {
             $is_valid = true;
@@ -227,6 +243,7 @@ class MultiScraper
                 // printDie("Keeping {$torrent->hash} - Meets all criteria :)", false);
             }
         }
+
         return $valid;
     }
 
@@ -244,6 +261,7 @@ class MultiScraper
      * Execute Readable Bytes config
      *
      * @param array $torrents
+     * @return array
      */
     private function make_readable_bytes(array $torrents)
     {
@@ -259,6 +277,7 @@ class MultiScraper
                 }
             }
         }
+
         return $torrents;
     }
 
@@ -275,7 +294,8 @@ class MultiScraper
     /**
      * Execute Nested Files config
      *
-     * @param bool $state
+     * @param array $torrents
+     * @return array
      */
     private function make_nested_files(array $torrents)
     {
@@ -284,6 +304,7 @@ class MultiScraper
                 $torrent->files = nest_files($torrent->files);
             }
         }
+
         return $torrents;
     }
 

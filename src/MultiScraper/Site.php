@@ -3,6 +3,7 @@
 namespace YeTii\MultiScraper;
 
 use JJG\Request;
+use Monolog\Logger;
 use YeTii\MultiScraper\Attributes\DateCreated;
 use YeTii\MultiScraper\Attributes\FileCount;
 use YeTii\MultiScraper\Attributes\Files;
@@ -56,6 +57,10 @@ class Site
      * @var bool
      */
     protected $debug = true;
+    /**
+     * @var Logger|null
+     */
+    public $logger = null;
 
 
     /* ===================================================
@@ -216,7 +221,7 @@ class Site
             if ($attr->match || $attr->match_all) {
                 $this->attributes[$key] = $attr;
             } else {
-                // log
+                $this->log('Failed to add attribute.', Logger::ERROR);
             }
         }
 
@@ -278,7 +283,7 @@ class Site
             if ($method->match || $method->match_all) {
                 $this->methods[$key] = $method;
             } else {
-                // log
+                $this->log('Failed to add method.', Logger::ERROR);
             }
         }
 
@@ -300,7 +305,7 @@ class Site
      * Execute a specified method
      *
      * @param string $name
-     * @param mixed $args
+     * @param mixed  $args
      * @return mixed|null
      */
     private function runMethod($name, $args)
@@ -351,7 +356,7 @@ class Site
                     }
                 }
             } else {
-                // log... failed
+                $this->log('Failed to scrape the latest torrents.', Logger::WARNING);
             }
         }
 
@@ -382,7 +387,7 @@ class Site
                     }
                 }
             } else {
-                // log... failed
+                $this->log('Failed to scrape the queried torrents.', Logger::WARNING);
             }
         }
 
@@ -413,7 +418,7 @@ class Site
                     }
                 }
             } else {
-                // log... failed
+                $this->log('Failed to scrape the user\'s torrents.', Logger::WARNING);
             }
         }
 
@@ -560,5 +565,18 @@ class Site
         }
 
         return null;
+    }
+
+    /**
+     * Output to a specified Logger
+     *
+     * @param string $message
+     * @param int    $level
+     */
+    private function log(string $message, $level = Logger::DEBUG)
+    {
+        if ($this->logger) {
+            $this->logger->log($level, $message);
+        }
     }
 }
