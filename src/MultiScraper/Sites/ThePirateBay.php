@@ -2,6 +2,7 @@
 
 namespace YeTii\MultiScraper\Sites;
 
+use YeTii\MultiScraper\Category;
 use YeTii\MultiScraper\Site;
 
 /**
@@ -102,6 +103,17 @@ class ThePirateBay extends Site
             'extract_rows' => [
                 'match_all' => '/<tr[^>]*>.+?<a href="\/torrent\/(\d+)\/.+?<\/tr>/is',
             ]
+        ]);
+
+        $this->addCategory([
+            Category::MOVIES       => 201,
+            Category::TV           => 205,
+            Category::GAMES        => 400,
+            Category::MUSIC        => 101,
+            Category::APPLICATIONS => 300,
+            Category::BOOKS        => 601,
+            Category::XXX          => 500,
+            Category::OTHER        => 600,
         ]);
     }
 }
