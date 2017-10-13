@@ -4,9 +4,9 @@ use PHPUnit\Framework\TestCase;
 use YeTii\MultiScraper\MultiScraper;
 
 /**
- * Class RetrieveLatestTorrentsTest
+ * Class RetrieveSearchedTorrentsTest
  */
-class RetrieveLatestTorrentsTest extends TestCase
+class RetrieveSearchedTorrentsTest extends TestCase
 {
     /**
      * @var MultiScraper
@@ -14,7 +14,7 @@ class RetrieveLatestTorrentsTest extends TestCase
     protected $instance;
 
     /**
-     * RetrieveLatestTorrentsTest constructor.
+     * RetrieveUsersTorrentsTest constructor.
      */
     public function __construct()
     {
@@ -23,11 +23,11 @@ class RetrieveLatestTorrentsTest extends TestCase
     }
 
     /**
-     * Test whether the latest() method is working correctly
+     * Test whether the search() method is working correctly
      */
-    public function testCanRetrieveLatestTorrents()
+    public function testCanRetrieveSearchedTorrents()
     {
-        $results = $this->instance->latest();
+        $results = $this->instance->search('ettv');
         $this->assertArrayHasKey(0, $results);
         $this->assertInstanceOf(stdClass::class, $results[0]);
     }
