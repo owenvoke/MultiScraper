@@ -62,7 +62,19 @@ class MultiScraper
      */
     public function __construct(array $args = null, $logger = null)
     {
-        $this->sites = require __DIR__ . '/scrapers.php';
+        // Add site classes from Sites directory
+        $sites = new \DirectoryIterator(__DIR__ . '/Sites');
+        foreach ($sites as $site) {
+            if ($site->isDot() || $site->isDir() || $site->getExtension() !== 'php') {
+                continue;
+            }
+
+            // Add class instances to $this->sites array
+            $siteClass = 'YeTii\\MultiScraper\\Sites\\' . $site->getBasename('.php');
+            $this->sites[] = new $siteClass;
+        }
+
+        // Set the Monolog\Logger instance or null
         $this->logger = $logger;
     }
 
