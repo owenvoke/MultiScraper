@@ -1,18 +1,16 @@
 # MultiScraper
-A multi-site torrent scraper
 
+A few torrent scraper libraries for scraping torrents from all over.
 
-## Installation
+## Install
 
-Require through composer:  
-`composer require undeadyetii/multiscraper`
+Via Composer
 
-## Unit Testing
+```bash
+$ composer require undeadyetii/multiscraper
+```
 
-This package uses [PHPUnit](https://phpunit.de) for it's unit tests. To run the test suite, use the following:  
-`php vendor/bin/phpunit` or `phpunit` (if installed globally)
-
-#### How to use
+## Usage
 
 ```php
 $scraper = new \YeTii\MultiScraper\MultiScraper();
@@ -42,7 +40,7 @@ $scraper->convert_images('jpg'); // Convert any scraped images
 
 #### Logging
 
-This package supports logging using [Monolog](https://packagist.org/packages/monolog/monolog).  
+This package supports logging using [Monolog].  
 To enable this, you will need to create a new instance of `Monolog\Logger`.  
 Next attach some handlers to it using `$log->pushHandler()`.
 
@@ -54,3 +52,24 @@ $log = new Monolog\Logger;
 $scraper = new YeTii\MultiScraper\MultiScraper($args, $log);
 ...
 ```
+
+## Testing
+
+```bash
+$ composer test
+```
+
+## Credits
+
+- [undeadyetii][link-author]
+- [All Contributors][link-contributors]
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
+
+[monolog]: https://packagist.org/packages/monolog/monolog
+
+[link-packagist]: https://packagist.org/packages/undeadyetii/colesscraper
+[link-author]: https://github.com/undeadyetii
+[link-contributors]: ../../contributors
