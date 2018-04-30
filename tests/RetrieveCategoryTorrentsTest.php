@@ -1,8 +1,8 @@
 <?php
 
+namespace YeTii\MultiScraper;
+
 use PHPUnit\Framework\TestCase;
-use YeTii\MultiScraper\Category;
-use YeTii\MultiScraper\MultiScraper;
 
 /**
  * Class RetrieveCategoryTorrentsTest
